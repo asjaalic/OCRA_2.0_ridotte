@@ -1,0 +1,9 @@
+#GUROBI
+    MIPGap = 0.05
+    MIPFocus = 3
+    Method = 2      
+    Cuts = -1
+    Heuristics = 0
+    
+
+

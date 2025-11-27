@@ -1,0 +1,17 @@
+
+# characteristics and parameters
+    min_SOC = 0.05
+    max_SOC = 1.0
+    Eff_charge = 0.96
+    Eff_discharge = 0.96
+    min_P = 0.0
+    max_P = 1.0
+    max_SOH = 1.05
+    min_SOH = 1
+    Nfull = 10000
+    fix = 980
+    cost = 0.985
+
+
+
+

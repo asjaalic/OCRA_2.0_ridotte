@@ -1,0 +1,21 @@
+# Set input
+    # from .in file, else from jld file
+    setInputParameters = true
+
+    # from input files, else from jld inputhpath
+    batterySystemFromFile = true
+
+    excel_savings = true
+
+    endlife = false     
+    endlife_rolling = false  
+    rolling_newDeg = false
+
+# Solver settings
+    solveMIP = true
+    #If using SOS2
+
+
+    
+
+  

@@ -1,0 +1,6 @@
+DataPath = C:\\Users\\Utente\\Desktop\\ASJA\\OCRA 2.0 (IREP)
+InputPath = C:\\Users\\Utente\\Desktop\\ASJA\\OCRA 2.0 (IREP)
+ResultPath = C:\\Users\\Utente\\Desktop\\ASJA\\OCRA 2.0 (IREP)
+#ending to case name 
+CaseName = _Version_exact_inequalities
+
