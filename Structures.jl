@@ -13,7 +13,7 @@
     Hours_saved::I
     Big::F                                        # A big number
     conv::F                                       # A small number for degradation convergence
-    disc::I                                       # Discretization points
+    bin::I                                       # Discretization points
 end
 
 # Battery's characteristics
@@ -67,28 +67,20 @@ end
 end
 
 # Optimization problem
-struct BuildStageProblem
+struct BuildStageProblem_3
     M::Any
     soc::Any
     soc_quad::Any
     charge::Any 
     discharge::Any
-    #binary::Any
     deg::Any
     x::Any
     y::Any
     z::Any
-    #u::Any
-    w_xx::Any
-    w_yy::Any
-    w_zz::Any
-    w_xy::Any
-    w_xz::Any
-    w_zy::Any
-    #w_uu::Any
-    #w_xu::Any
-    #w_yu::Any
-    #w_zu::Any
+    xy::Any
+    xz::Any
+    zy::Any
+    xyz::Any
     capacity::Any
     revamping::Any
     e::Any
@@ -96,7 +88,7 @@ struct BuildStageProblem
     rev_acquisto::Any
 end
 
-struct Results
+struct Results_3
     objective::Any
     #revenues_per_stage::Any
     gain_stage::Any
@@ -111,17 +103,65 @@ struct Results
     x::Any
     y::Any
     z::Any
-    #u::Any
-    w_xx::Any
-    w_yy::Any
-    w_zz::Any
-    #w_uu::Any
-    w_xy::Any
-    w_xz::Any
-    w_zy::Any
-    #w_xu::Any
-    #w_yu::Any
-    #w_zu::Any
+    xy::Any
+    xz::Any
+    yz::Any
+    xyz::Any
+    rev::Any
+    cap::Any
+    e::Any
+    rev_vendita::Any
+    rev_acquisto::Any
+end
+
+# Optimization problem
+struct BuildStageProblem_4
+    M::Any
+    soc::Any
+    soc_quad::Any
+    charge::Any 
+    discharge::Any
+    deg::Any
+    x::Any
+    y::Any
+    z::Any
+    u::Any
+    xy::Any
+    xz::Any
+    xu::Any
+    zy::Any
+    yu::Anyzu::Any
+    xyzu::Any
+    capacity::Any
+    revamping::Any
+    e::Any
+    rev_vendita::Any
+    rev_acquisto::Any
+end
+
+struct Results_4
+    objective::Any
+    #revenues_per_stage::Any
+    gain_stage::Any
+    cost_rev::Any
+    deg_stage::Any
+    soc::Any
+    charge::Any
+    discharge::Any
+    #bin::Any
+    deg::Any
+    soc_quad::Any
+    x::Any
+    y::Any
+    z::Any
+    u::Any
+    xy::Any
+    xz::Any
+    xu::Any
+    yz::Any
+    yu::Any
+    zu::Any
+    xyzu::Any
     rev::Any
     cap::Any
     e::Any

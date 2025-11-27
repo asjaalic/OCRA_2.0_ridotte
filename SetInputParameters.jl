@@ -268,113 +268,6 @@ function read_input_from_jld(InputPath, InputCase, filname)
   end
 end
 
-
-
-# DEFINE MARKOV MODEL
-
-#=
-function set_stochastic_variables(
-  runMode::runModeParam,
-  case::caseData,
-  InputParameters::InputParam,
-)
-  #Set stochastic variables, Markow model 
-  try
-    if runMode.createMarkovModel
-      println("Creating Markov model.")
-      inflow = read_csv("inflow.csv", case.DataPath) #Mm3     # file degli inflow futuri
-      price = read_csv("price.csv", case.DataPath) #Eur/MWh     # file dei prezzi futuri
-      scenLData = samplingAlg(inflow, price, InputParameters)
-    else
-      println("Reading makov model from JLD file.")
-      scenFile = "scenarioLatticeData.jld"
-      ScenStatesFromFile = load(joinpath(case.InputPath, scenFile))
-      scenLData = ScenStatesFromFile["scenarioLatticeData"]
-    end
-
-    return scenLData
-  catch e
-    println("Can't set stochastic variables, Markov model.")
-    throw(error())
-  end
-end
-
-function adjust_scenLattice_to_envConstriant(envDataList, runMode, scenLData)
-
-  if !(qMinDependent == 0)
-    println("State-dependent min flow included..")
-  end
-  println("Solving with environmental constraint..")
-
-  if use_early_activation(envDataList)
-    println("Early activation of environmental constraint is possible..")
-    if runMode.createMarkovModel | runMode.extendScenarioLattice
-      extendedLattice = extend_scenario_lattice(scenLData, envDataList[1])
-      scenLData.ScenarioLattice.states = extendedLattice.states
-      scenLData.ScenarioLattice.probability = extendedLattice.probability
-    end
-  end
-
-  return scenLData
-end
-=#
-
-#= DEFINE SCENARIOS FOR END SIMULATION
-
-function set_sim_scenarios(runMode, NSimScen, scenLData)
-  try
-    if runMode.drawScenarios
-      SimScen =
-        drawScenForSim(NSamples, NSimScen, scenLData.trajectories, scenLData.KmeansClusters)
-      println("Draw scenarios for simulation")
-    end
-
-    if runMode.drawOutofSampleScen
-      SimScen = drawOutOfSampleScenForSim(priceYear, NSimScen, scenLData.states, 3456) #seednum=3456
-      println("Draw out-of-sample scenarios for simulation")
-    end
-
-    if runMode.useScenariosFromDataStorage
-      scenFile = "SimScen.jld"
-      SimScenFromFile = load(joinpath(case.InputPath, scenFile))
-      SimScen = SimScenFromFile["SimScen"]
-      println("Use stored scenarios for simulation")
-    end
-
-    if runMode.useHistoricScen
-      SimScen, NSimScen = scenFromInput(inflow, price, scenLData.states)
-      println("Use historical scenarios for simulation")
-    end
-
-    return SimScen
-  catch e
-    println("Could not set simulations scenarios.")
-    throw(error())
-  end
-end
-
-=#
-
-# read results from SDP 
-#= -> for stand-alone sim or warmstart of SDP
-function read_SDP_results(InputCase)
-  try
-    SDPfile = InputCase * "sdpRes.jld"
-    resultsSDPfile = load(joinpath(case.InputPath, SDPfile))
-    ResultsSDP = resultsSDPfile["sdpRes"]
-    return ResultsSDP
-  catch e
-    println("Can't read future value table.")
-    throw(error())
-  end
-end
-
-function needToExpandAlphaTable(ResultsSDP, NStates, envDataList)
-  return first(envDataList).firstAct > 0 && size(ResultsSDP.AlphaTable)[2] == NStates
-end
-
-=#
-
 # set case run name for saving results
 
 function set_run_name(case, ResultPath, NSteps)
@@ -392,6 +285,57 @@ function set_run_name(case, ResultPath, NSteps)
 
   return joinpath(Finalpath, runName)
 end
+
+
+function calculate_coefficients(min_SOC,max_SOC,bin)
+  disc = 2^bin-1
+  a= zeros(disc+1);
+  b= zeros(disc+1);
+
+  step = (max_SOC-min_SOC)/disc
+  a[1]= min_SOC
+  b[1] = min_SOC^2
+  c=0
+
+  for i =1:disc
+    a[i+1]= a[i]+step
+    b[i+1] = a[i+1]^2
+  end
+
+  if bin == 3 
+    include("ProblemForm.jl")
+    include("solveOptimizationAlgorithm.jl")
+    c = zeros(7);
+    c[1]= b[2]-b[1]
+    c[2]= b[3]-b[1]
+    c[3]= b[4]-b[3]-b[2]+b[1]
+    c[4]= b[5]-b[1]
+    c[5]= b[6]-b[2]-b[5]+b[1]
+    c[6]= b[7]-b[3]-b[5]+b[1]
+    c[7]= 0 #b[8]-b[4]-b[6]-b[7]+b[2]+b[3]+b[5]-b[1]
+  elseif bin ==4
+    include("ProblemForm_4_bin.jl")
+    include("solveOptimizationAlgorithm_4_bin.jl")
+    c = zeros(11)
+    c[1]= b[2]-b[1]
+    c[2]= b[3]-b[1]
+    c[3]= b[5]-b[1]
+    c[4]= b[9]-b[1]
+    c[5]= b[4]-b[2]-b[3]+b[1]
+    c[6]= b[6]-b[2]-b[5]+b[1]
+    c[7]= b[10]-b[9]-b[2]+b[1]
+    c[8]= b[7]-c[3]-c[2]-b[1]
+    c[9]= b[11]-b[1]-c[4]-c[2]
+    c[10]= b[13]-b[1]-c[4]-c[3]
+    c[11]= 0
+  else
+    println("Change number of binary variables")
+    throw(error())
+  end
+
+  return (a,b,c,disc)
+end
+
 
 
 

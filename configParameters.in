@@ -11,5 +11,5 @@
 #General
     Big = 1.05
     conv = 0.001
-    disc = 7
+    bin = 3
 

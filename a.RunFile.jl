@@ -41,7 +41,7 @@ to = TimerOutput()
   # Set run mode (how and what to run) and Input parameters
   runMode = read_runMode_file()
   InputParameters = set_parameters(runMode, case)
-  @unpack (NYears, NMonths, NHoursStep, NStages, Big, conv, disc, Hours_rolling, Hours_saved)= InputParameters;    #NSteps, NHoursStage
+  @unpack (NYears, NMonths, NHoursStep, NStages, Big, conv, bin, Hours_rolling, Hours_saved)= InputParameters;    #NSteps, NHoursStage
 
   # Upload battery's characteristics
   Battery = set_battery_system(runMode, case)
@@ -49,6 +49,8 @@ to = TimerOutput()
 
   # Set solver parameters (Gurobi etc)
   SolverParameters = set_solverParameters()
+
+  a,b,c,disc = calculate_coefficients(min_SOC,max_SOC,bin)
 
   # Read power prices from a file [€/MWh]
   Steps_stages = [0 653 1396 2043 2777 3441 4187 4843 5582 6259 7000 7673 8415 9093 9835 10501 11236 11903 12641 13315 14047]
@@ -65,25 +67,23 @@ to = TimerOutput()
 
 end
 
-#save input data
-@timeit to "Save input" begin
-    save(joinpath(FinalResPath,"CaseDetails.jld"), "case" ,case)
-    save(joinpath(FinalResPath,"SolverParameters.jld"), "SolverParameters" ,SolverParameters)
-    save(joinpath(FinalResPath,"InputParameters.jld"), "InputParameters" ,InputParameters)
-    save(joinpath(FinalResPath,"BatteryCharacteristics.jld"), "BatteryCharacteristics" ,Battery)
-    save(joinpath(FinalResPath,"PowerPrices.jld"),"PowerPrices",Power_prices)
-end
-
 @timeit to "Solve optimization problem" begin
-  ResultsOpt = solveOptimizationProblem(InputParameters,SolverParameters,Battery);
-  save(joinpath(FinalResPath, "optimization_results.jld"), "optimization_results", ResultsOpt)
+  if bin ==3
+    ResultsOpt_3 = solveOptimizationProblem_3(InputParameters,SolverParameters,Battery);
+  elseif bin == 4
+    ResultsOpt_4 = solveOptimizationProblem_4(InputParameters,SolverParameters,Battery);
+  end
 end
 
 # SAVE DATA IN EXCEL FILES
 if runMode.excel_savings
-  cartella = "C:\\Users\\Utente\\Desktop\\ASJA\\OCRA 2.0 (IREP)\\Prova Alessandra"
+  cartella = "C:\\GitHub\\OCRA_2.0_variabili_ridotte\\Results_OCRA_2.0_ridotte"
   cd(cartella)
-  Saving = data_saving(InputParameters,ResultsOpt)
+  if bin ==3
+    Saving = data_saving(InputParameters,ResultsOpt_3)
+  elseif bin ==4
+    Saving = data_saving(InputParameters,ResultsOpt_4)
+  end
 else
   println("Solved without saving results in xlsx format.")
 end
