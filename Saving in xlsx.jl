@@ -13,7 +13,7 @@ function data_saving_3(InputParameters::InputParam,ResultsOpt_3::Results_3)
     hour=string(now())
     a=replace(hour,':'=> '-')
 
-    nameF= "OCRA 2 ORIGINALE 3 bin _PROVA 03.09 pt 4 sei mesi"
+    nameF= "Test 3 variabili"
     nameFile="Summary " 
 
     folder = "$nameF"
@@ -69,6 +69,14 @@ function data_saving_3(InputParameters::InputParam,ResultsOpt_3::Results_3)
         steps[!, "Discharge MW"] = discharge[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
         steps[!, "SOC_quad MWh"] = soc_quad[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
         steps[!, "Deg MWh"] = deg[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "X"] = x[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "Y"] = y[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "Z"] = z[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "XY"] = xy[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "XZ"] = xz[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "YZ"] = yz[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "XYZ"] = xyz[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+
 
         XLSX.writetable("$iStage stage $a.xlsx", overwrite=true,                                       #$nameFile
         results_steps = (collect(DataFrames.eachcol(steps)),DataFrames.names(steps)),
@@ -88,13 +96,13 @@ function data_saving_4(InputParameters::InputParam,ResultsOpt_4::Results_4)
     @unpack (NYears, NMonths, NStages, Big, NHoursStep, bin) = InputParameters;       #NSteps,NHoursStage
     
    #@unpack (charge,discharge, soc, revenues_per_stage, x, y, z, w_xx, w_yy, w_zz, w_xy, w_xz, w_zy) rev_vendita, rev_acquisto = ResultsOpt;  
-   @unpack (charge,discharge,rev,cap,e, soc,soc_quad,deg,deg_stage,gain_stage, cost_rev,rev_vendita, rev_acquisto,x, y, z, xy, xz, yz, xyz) = ResultsOpt_4;
+   @unpack (charge,discharge,rev,cap,e, soc,soc_quad,deg,deg_stage,gain_stage, cost_rev,rev_vendita, rev_acquisto,x, y, z,u, xy, xz, xu, yz, yu, zu, xyzu) = ResultsOpt_4;
    @unpack (min_SOC, max_SOC, min_P, max_P, Eff_charge, Eff_discharge, max_SOH, min_SOH, Nfull,fix,cost ) = Battery ; 
 
     hour=string(now())
     a=replace(hour,':'=> '-')
 
-    nameF= "OCRA 2 ORIGINALE 3 bin _PROVA 03.09 pt 4 sei mesi"
+    nameF= "Test 4 bin"
     nameFile="Summary " 
 
     folder = "$nameF"
@@ -150,6 +158,17 @@ function data_saving_4(InputParameters::InputParam,ResultsOpt_4::Results_4)
         steps[!, "Discharge MW"] = discharge[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
         steps[!, "SOC_quad MWh"] = soc_quad[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
         steps[!, "Deg MWh"] = deg[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "X"] = x[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "Y"] = y[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "Z"] = z[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "U"] = z[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "XY"] = xy[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "XZ"] = xz[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "XU"] = xu[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "YZ"] = yz[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "YU"] = yu[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "ZU"] = zu[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
+        steps[!, "XYZU"] = xyzu[(Steps_stages[iStage]+1):(Steps_stages[iStage+1])]
 
         XLSX.writetable("$iStage stage $a.xlsx", overwrite=true,                                       #$nameFile
         results_steps = (collect(DataFrames.eachcol(steps)),DataFrames.names(steps)),
@@ -162,6 +181,7 @@ function data_saving_4(InputParameters::InputParam,ResultsOpt_4::Results_4)
 
     return println("Saved data in xlsx")
 end
+
 
 function data_saving_rolling(InputParameters::InputParam, ResultsEnd::ResultsEndLife)
     

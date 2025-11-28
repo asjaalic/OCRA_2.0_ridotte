@@ -79,7 +79,7 @@ struct BuildStageProblem_3
     z::Any
     xy::Any
     xz::Any
-    zy::Any
+    yz::Any
     xyz::Any
     capacity::Any
     revamping::Any
@@ -129,7 +129,7 @@ struct BuildStageProblem_4
     xy::Any
     xz::Any
     xu::Any
-    zy::Any
+    yz::Any
     yu::Any
     zu::Any
     xyzu::Any
