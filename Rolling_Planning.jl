@@ -1,10 +1,10 @@
 # SOLVE OPTIMIZATION PROBLEM
 
-function solveRollingPlanning(InputParameters::InputParam, Battery::BatteryParam, ResultsOpt::Results, vec_prices)
+function solveRollingPlanning(InputParameters::InputParam, Battery::BatteryParam, ResultsOpt_3::Results_3, vec_prices)
 
     @unpack (NYears, NMonths, NStages, Big, NHoursStep, disc, Hours_rolling, Hours_saved) = InputParameters;                #NSteps, NHoursStage
     @unpack (min_SOC, max_SOC, Eff_charge, Eff_discharge, min_P, max_P, max_SOH, min_SOH, Nfull,fix ) = Battery;
-    @unpack (soc, cap, soc_quad) = ResultsOpt;
+    @unpack (soc, cap, soc_quad) = ResultsOpt_3;
 
     println("Solving Optimization Problem Case 2")
     k_end = min_SOH/(2*Nfull)
@@ -169,7 +169,7 @@ end
 
 
 
-function solveCase1(InputParameters::InputParam, Battery::BatteryParam, ResultsOpt::Results, vec_p, Tot_steps)
+function solveCase1(InputParameters::InputParam, Battery::BatteryParam, ResultsOpt_3::Results_3, vec_p, Tot_steps)
 
     @unpack (NYears, NMonths, NStages, Big, NHoursStep, disc,) = InputParameters;                #NSteps, NHoursStage
     @unpack (min_SOC, max_SOC, Eff_charge, Eff_discharge, min_P, max_P, max_SOH, min_SOH, Nfull,fix ) = Battery;
@@ -200,7 +200,7 @@ function solveCase1(InputParameters::InputParam, Battery::BatteryParam, ResultsO
     w_yu_e1 = zeros(Tot_steps+1)
     w_zu_e1 = zeros(Tot_steps+1)
 
-    problem_e1 = endlife(InputParameters, Battery, ResultsOpt, vec_p, Tot_steps)
+    problem_e1 = endlife(InputParameters, Battery, ResultsOpt_3, vec_p, Tot_steps)
 
     @timeit to "Solve optimization" optimize!(problem_e1.M_e)
 
@@ -290,11 +290,11 @@ function solveCase1(InputParameters::InputParam, Battery::BatteryParam, ResultsO
 
 end
 
-function solveNewDegradation(InputParameters::InputParam, Battery::BatteryParam, ResultsOpt::Results, prices)
+function solveNewDegradation(InputParameters::InputParam, Battery::BatteryParam, ResultsOpt_3::Results_3, prices)
 
     @unpack (NYears, NMonths, NStages, Big, NHoursStep, disc, Hours_rolling, Hours_saved) = InputParameters;                #NSteps, NHoursStage
     @unpack (min_SOC, max_SOC, Eff_charge, Eff_discharge, min_P, max_P, max_SOH, min_SOH, Nfull,fix ) = Battery;
-    @unpack (soc, cap, soc_quad) = ResultsOpt;
+    @unpack (soc, cap, soc_quad) = ResultsOpt_3;
 
     println("Solving Optimization Problem Case 3")
 

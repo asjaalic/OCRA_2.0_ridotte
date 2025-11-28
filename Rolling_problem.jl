@@ -143,11 +143,11 @@ end
 # CASE 1
 
 
-function endlife(InputParameters::InputParam, Battery::BatteryParam, ResultsOpt::Results, vec_p, Tot_steps)     # NO ROLLING PLANNING
+function endlife(InputParameters::InputParam, Battery::BatteryParam, ResultsOpt_3::Results_3, vec_p, Tot_steps)     # NO ROLLING PLANNING
   
   @unpack (NYears, NMonths, NStages, Big, NHoursStep, conv, disc) = InputParameters;     #NSteps,NHoursStage
   @unpack (min_SOC, max_SOC, min_P, max_P, Eff_charge, Eff_discharge, max_SOH, min_SOH, Nfull, fix) = Battery ;   
-  @unpack (soc,cap) = ResultsOpt;      
+  @unpack (soc,cap) = ResultsOpt_3;      
 
   k_e = min_SOH/(2*Nfull)
   Small_e = 0.64

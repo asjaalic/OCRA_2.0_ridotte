@@ -68,7 +68,7 @@ to = TimerOutput()
 end
 
 @timeit to "Solve optimization problem" begin
-  if bin ==3
+  if bin == 3
     ResultsOpt_3 = solveOptimizationProblem_3(InputParameters,SolverParameters,Battery);
   elseif bin == 4
     ResultsOpt_4 = solveOptimizationProblem_4(InputParameters,SolverParameters,Battery);

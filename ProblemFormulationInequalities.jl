@@ -1,6 +1,6 @@
 # STAGE MAXIMIZATION PROBLEM FORMULATION
 
-function BuildStageProblem(InputParameters::InputParam, SolverParameters::SolverParam, Battery::BatteryParam)       
+function BuildStageProblem_3(InputParameters::InputParam, SolverParameters::SolverParam, Battery::BatteryParam)       
 
     @unpack (MIPGap, MIPFocus, Method, Cuts, Heuristics) = SolverParameters;
   
@@ -80,8 +80,8 @@ function BuildStageProblem(InputParameters::InputParam, SolverParameters::Solver
     
     @constraint(M, xyz_1[iStep=1:NSteps+1], xyz[iStep] <= z[iStep])
     @constraint(M, xyz_2[iStep=1:NSteps+1], xyz[iStep] <= y[iStep])
-    @constraint(M, xyz_2[iStep=1:NSteps+1], xyz[iStep] <= x[iStep])
-    @constraint(M, xyz_3[iStep=1:NSteps+1], xyz[iStep] >= z[iStep]+y[iStep]+x[iStep]-2)  
+    @constraint(M, xyz_3[iStep=1:NSteps+1], xyz[iStep] <= x[iStep])
+    @constraint(M, xyz_4[iStep=1:NSteps+1], xyz[iStep] >= z[iStep]+y[iStep]+x[iStep]-2)  
 
     # CONSTRAINTS ON DEGRADATION
     @constraint(M, deg_1[iStep=1:NSteps], deg[iStep] >= soc_quad[iStep]/max_SOC^2 - soc_quad[iStep+1]/max_SOC^2 + (2/max_SOC)*(soc[iStep+1]-soc[iStep]))

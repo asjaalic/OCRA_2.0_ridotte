@@ -2,7 +2,7 @@
 
 function solveOptimizationProblem_3(InputParameters::InputParam, SolverParameters::SolverParam, Battery::BatteryParam)
 
-    @unpack (NYears, NMonths, NStages, Big, NHoursStep, disc,) = InputParameters;                #NSteps, NHoursStage
+    @unpack (NYears, NMonths, NStages, Big, NHoursStep, bin) = InputParameters;                #NSteps, NHoursStage
     @unpack (min_SOC, max_SOC, Eff_charge, Eff_discharge, min_P, max_P, max_SOH, min_SOH, Nfull,fix ) = Battery;
 
     println("Solving Optimization Problem")
@@ -44,7 +44,7 @@ function solveOptimizationProblem_3(InputParameters::InputParam, SolverParameter
     w_yu = zeros(NSteps+1)
     w_zu = zeros(NSteps+1)=#
 
-    problem = BuildStageProblem(InputParameters, SolverParameters, Battery)
+    problem = BuildStageProblem_3(InputParameters, SolverParameters, Battery)
 
     @timeit to "Solve optimization" optimize!(problem.M)
 

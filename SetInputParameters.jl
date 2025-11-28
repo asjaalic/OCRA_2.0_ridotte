@@ -125,7 +125,7 @@ function read_parameters_from_config_file(file = "configParameters.in")
   #paramDict = read_type_to_dict(file,Number)
   paramDict = read_type_to_dict(file, Any)
   
-  integers =[:NMonths :disc :NSteps :Hours_rolling :Hours_saved]  #NYears
+  integers =[:NMonths :bin :NSteps :Hours_rolling :Hours_saved]  #NYears
   paramDict = set_integers!(paramDict, integers)
 
   floats =[:NYears :Big :NHoursStep :conv]
@@ -303,8 +303,6 @@ function calculate_coefficients(min_SOC,max_SOC,bin)
   end
 
   if bin == 3 
-    include("ProblemForm.jl")
-    include("solveOptimizationAlgorithm.jl")
     c = zeros(7);
     c[1]= b[2]-b[1]
     c[2]= b[3]-b[1]
@@ -314,8 +312,6 @@ function calculate_coefficients(min_SOC,max_SOC,bin)
     c[6]= b[7]-b[3]-b[5]+b[1]
     c[7]= 0 #b[8]-b[4]-b[6]-b[7]+b[2]+b[3]+b[5]-b[1]
   elseif bin ==4
-    include("ProblemForm_4_bin.jl")
-    include("solveOptimizationAlgorithm_4_bin.jl")
     c = zeros(11)
     c[1]= b[2]-b[1]
     c[2]= b[3]-b[1]
