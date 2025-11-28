@@ -32,17 +32,10 @@ function solveOptimizationProblem_3(InputParameters::InputParam, SolverParameter
     x = zeros(NSteps+1)
     y = zeros(NSteps+1)
     z = zeros(NSteps+1)
-    #u = zeros(NSteps+1)
-    w_xx = zeros(NSteps+1)
-    w_yy = zeros(NSteps+1)
-    w_zz = zeros(NSteps+1)
-    w_xy = zeros(NSteps+1)
-    w_xz = zeros(NSteps+1)
-    w_zy = zeros(NSteps+1)
-    #=w_uu = zeros(NSteps+1)
-    w_xu = zeros(NSteps+1)
-    w_yu = zeros(NSteps+1)
-    w_zu = zeros(NSteps+1)=#
+    xy = zeros(NSteps+1)
+    xz = zeros(NSteps+1)
+    yz = zeros(NSteps+1)
+    xyz = zeros(NSteps+1)
 
     problem = BuildStageProblem_3(InputParameters, SolverParameters, Battery)
 
@@ -69,18 +62,10 @@ function solveOptimizationProblem_3(InputParameters::InputParam, SolverParameter
             x[iStep] = JuMP.value(problem.x[iStep])
             y[iStep] = JuMP.value(problem.y[iStep])
             z[iStep] = JuMP.value(problem.z[iStep])
-            #u[iStep] = JuMP.value(problem.u[iStep])
-            w_xx[iStep] = JuMP.value(problem.w_xx[iStep])
-            w_yy[iStep] = JuMP.value(problem.w_yy[iStep])
-            w_zz[iStep] = JuMP.value(problem.w_zz[iStep])
-            w_xy[iStep] = JuMP.value(problem.w_xy[iStep])
-            w_xz[iStep] = JuMP.value(problem.w_xz[iStep])
-            w_zy[iStep] = JuMP.value(problem.w_zy[iStep])
-
-          #=  w_uu[iStep] = JuMP.value(problem.w_uu[iStep])
-            w_xu[iStep] = JuMP.value(problem.w_xu[iStep])
-            w_yu[iStep] = JuMP.value(problem.w_yu[iStep])
-            w_zu[iStep] = JuMP.value(problem.w_zu[iStep])=#
+            xy[iStep] = JuMP.value(problem.xy[iStep])
+            xz[iStep] = JuMP.value(problem.xz[iStep])
+            yz[iStep] = JuMP.value(problem.yz[iStep])
+            xyz[iStep] = JuMP.value(problem.xyz[iStep])
 
         end
 
@@ -89,18 +74,10 @@ function solveOptimizationProblem_3(InputParameters::InputParam, SolverParameter
         x[end] = JuMP.value(problem.x[end])
         y[end] = JuMP.value(problem.y[end])
         z[end] = JuMP.value(problem.z[end])
-        #u[end] = JuMP.value(problem.u[end])
-        w_xx[end] = JuMP.value(problem.w_xx[end])
-        w_yy[end] = JuMP.value(problem.w_yy[end])
-        w_zz[end] = JuMP.value(problem.w_zz[end])
-        w_xy[end] = JuMP.value(problem.w_xy[end])
-        w_xz[end] = JuMP.value(problem.w_xz[end])
-        w_zy[end] = JuMP.value(problem.w_zy[end])
-
-      #=  w_uu[end] = JuMP.value(problem.w_uu[end])
-        w_xu[end] = JuMP.value(problem.w_xu[end])
-        w_yu[end] = JuMP.value(problem.w_yu[end])
-        w_zu[end] = JuMP.value(problem.w_zu[end])=#
+        xy[end] = JuMP.value(problem.xy[end])
+        xz[end] = JuMP.value(problem.xz[end])
+        yz[end] = JuMP.value(problem.yz[end])
+        xyz[end] = JuMP.value(problem.xyz[end])
 
         cap[end] = JuMP.value(problem.capacity[end])
      
@@ -154,17 +131,10 @@ function solveOptimizationProblem_3(InputParameters::InputParam, SolverParameter
         x,
         y,
         z,
-        #u,
-        w_xx,
-        w_yy,
-        w_zz,
-        #w_uu,
-        w_xy,
-        w_xz,
-        w_zy,
-        #w_xu,
-        #w_yu,
-        #w_zu,
+        xy,
+        xz,
+        yz,
+        xyz,
         rev,
         cap,  
         e,
@@ -301,7 +271,7 @@ function solveOptimizationProblem_4(InputParameters::InputParam, SolverParameter
     
     println("Collected results")
 
-    return Results_3(
+    return Results_4(
         objective,
         #revenues_per_stage,
         gain_stage,
