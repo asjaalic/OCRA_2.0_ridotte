@@ -39,6 +39,9 @@ function solveOptimizationProblem_3(InputParameters::InputParam, SolverParameter
 
     problem = BuildStageProblem_3(InputParameters, SolverParameters, Battery)
 
+    @unpack (M) = problem
+    write_to_file(M,"modello_Formato_mps.mps")
+
     @timeit to "Solve optimization" optimize!(problem.M)
 
     if termination_status(problem.M) != MOI.OPTIMAL
